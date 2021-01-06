@@ -1,53 +1,40 @@
 import processing.core.PApplet;
-import processing.core.PFont;
-import processing.core.PImage;
-
 import java.util.ArrayList;
 
-public class ProcessingOOP extends PApplet{
-    public static final int WIDTH = 840;
-    public static final int HEIGHT = 752;
-    public static final int radius=10;
-    public static int textPosX = 590;
-    public static int textPosY = 590;
-    PFont myFont;
-    public static final int Ball1Height=HEIGHT*1/5;
-    public static final int Ball2Height=HEIGHT*2/5;
-    public static final int Ball3Height=HEIGHT*3/5;
-    public static final int Ball4Height=HEIGHT*4/5;
-    public static final int speedOfBall1=1;
-    public static final int speedOfBall2=2;
-    public static final int speedOfBall3=3;
-    public static final int speedOfBall4=4;
-    int w,x,y,z=0;
-    boolean printedMessage=false;
+public class ProcessingOOPRef extends PApplet {
 
-
-    public static void main(String args[]) {
-        PApplet.main("ProcessingOOP", args);
+    public static void main(String args[]){
+        PApplet.main("ProcessingOOPRef",args);
     }
+    int WIDTH = 840;
+    int HEIGHT = 752;
+    int radius=10;
+    int textPosX = 590;
+    int textPosY = 590;
+    int numberOfBalls=4;
+    int ballHeight[]=new int[]{HEIGHT*1/5,HEIGHT*2/5,HEIGHT*3/5,HEIGHT*4/5};
+    int speedOfBall[]=new int[]{1,2,3,4};
+    int currentPositionOfBall=0;
+    boolean isMessageDisplayed=false;
+    int red = 255;
+    int green = 204;
+    int blue = 0;
+    int framePosToBeReduced=160;
     ArrayList<Balls> balls=new ArrayList<Balls>();
-    //String message="Happy New Year 2021";
+
 
     @Override
     public void settings() {
-        size(WIDTH,HEIGHT);
-
+        size(WIDTH, HEIGHT);
     }
 
     @Override
     public void setup() {
-        background(255,204,0);
-        //myFont=createFont("FFScala",24);
-        //textFont(myFont);
-        //PImage crackers=loadImage("/Users/anushag/Downloads/crackers.jpeg");
-        background(53);
-        balls.add(new Balls(HEIGHT*1/5,speedOfBall1,w,printedMessage));
-        balls.add(new Balls(HEIGHT*2/5,speedOfBall2,x,printedMessage));
-        balls.add(new Balls(HEIGHT*3/5,speedOfBall3,y,printedMessage));
-        balls.add(new Balls(HEIGHT*4/5,speedOfBall4,z,printedMessage));
-
-
+        int black = 53;
+        background(black);
+        for(int i=0;i<numberOfBalls;i++) {
+            balls.add(new Balls(currentPositionOfBall, isMessageDisplayed));
+        }
     }
 
     @Override
@@ -58,38 +45,36 @@ public class ProcessingOOP extends PApplet{
     private void makeEachBallMove() {
         for (int i = 0; i < balls.size(); i++) {
             Balls ball=balls.get(i);
-            ellipse(ball.w,ball.HEIGHT,radius,radius);
-            ball.w += ball.speedOfBall;
+            ellipse(ball.currentPositionOfBall,ballHeight[i], radius, radius);
+            ball.currentPositionOfBall += speedOfBall[i];
             checkIfBoundaryIsHit(ball);
-
         }
     }
 
     private void checkIfBoundaryIsHit(Balls ball) {
-        if (ball.w > WIDTH || ball.w + radius > WIDTH) {
-            if(ball.printedMessage==false) {
+        if (ball.currentPositionOfBall + radius > WIDTH) {
+            if(ball.IsMessageDisplayed == false) {
                 text("I hit a boundary..Redirecting", textPosX, textPosY);
-                fill(255,204,0);
+                fill(red,green,blue);
                 textSize(20);
-                textPosY -= 160;
-                textPosX -= 160;
-                ball.printedMessage=true;
+                textPosY -= framePosToBeReduced;
+                textPosX -= framePosToBeReduced
+                ball.IsMessageDisplayed = true;
             }
-            ball.w *= -1;
+            ball.currentPositionOfBall *= -1;
         }
     }
 
     class Balls{
-        int HEIGHT;
-        int speedOfBall;
-        int w;
-        boolean printedMessage;
-        //String message;
-        public Balls(int HEIGHT,int speedOfBall,int w,boolean printedMessage) {
-            this.HEIGHT=HEIGHT;
-            this.speedOfBall=speedOfBall;
-            this.w=w;
-            this.printedMessage=printedMessage;
+        int currentPositionOfBall;
+        boolean IsMessageDisplayed;
+        public Balls(int currentPositionOfBall,boolean printedMessage) {
+            this.currentPositionOfBall=currentPositionOfBall;
+            this.IsMessageDisplayed=printedMessage;
         }
+
     }
 }
+
+
+
